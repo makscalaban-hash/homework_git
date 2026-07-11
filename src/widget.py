@@ -1,12 +1,14 @@
 from datetime import datetime
-from src.masks.masking import get_mask_card_number, get_mask_account
+
+from src.masks.masking import get_mask_account, get_mask_card_number
 
 
 def mask_account_card(info: str) -> str:
     """Маскирует номер карты или счета в строке.
 
     Args:
-        info (str): Строка вида "Visa Platinum 7000792289606361" или "Счет 73654108430135874305"
+        info (str): Строка вида "Visa Platinum 7000792289606361"
+            или "Счет 73654108430135874305"
 
     Returns:
         str: Строка с замаскированным номером.
