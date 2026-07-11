@@ -22,8 +22,8 @@
 # Клонировать репозиторий
 git clone <ваш_репозиторий>
 
-# Установить зависимости
-poetry install --with lint
+# Установить зависимости (линтеры + тесты)
+poetry install --with lint,test
 
 # Запуск проверок
 poetry run black --check src/
@@ -31,6 +31,26 @@ poetry run isort --check-only src/
 poetry run flake8 src/
 poetry run mypy src/
 ```
+
+## Тестирование
+
+Тесты написаны с использованием `pytest`, лежат в директории `tests/` — по одному
+файлу на каждый тестируемый модуль (`test_masking.py`, `test_widget.py`,
+`test_processing.py`), с общими фикстурами в `tests/conftest.py`. Для проверки
+разных входных данных активно используется параметризация (`@pytest.mark.parametrize`).
+
+```bash
+# Запустить все тесты
+poetry run pytest
+
+# Запустить тесты с отчетом покрытия в терминале
+poetry run pytest --cov=src --cov-report=term-missing
+
+# Сгенерировать HTML-отчет покрытия (появится папка htmlcov/)
+poetry run pytest --cov=src --cov-report=html
+```
+
+Открыть отчет о покрытии можно, открыв файл `htmlcov/index.html` в браузере.
 
 ## Примеры использования
 
@@ -55,4 +75,5 @@ sorted_ops = sort_by_date(operations)
 - `src/masks/` — функции маскирования
 - `src/widget.py` — виджеты
 - `src/processing.py` — обработка данных
-- `tests/` — тесты (будут добавлены позже)
+- `tests/` — тесты (pytest, фикстуры в `conftest.py`, отдельный файл теста на каждый модуль)
+- `htmlcov/` — HTML-отчет о покрытии тестами (генерируется командой из раздела «Тестирование»)
