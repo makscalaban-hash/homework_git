@@ -40,3 +40,10 @@ def operations_with_duplicate_dates() -> List[Dict[str, Any]]:
 def operations_empty() -> List[Dict[str, Any]]:
     """Пустой список операций."""
     return []
+
+
+@pytest.fixture
+def temp_log_file(tmp_path):  # type: ignore
+    """Временный файл для логирования в тестах декоратора."""
+    log_file = tmp_path / "test_log.txt"
+    return str(log_file)
