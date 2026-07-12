@@ -66,11 +66,16 @@ version = "0.4.6"
 description = "Cross-platform colored terminal text."
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*,>=2.7"
+feature/add-generators
 groups = ["lint", "test"]
+groups = ["lint"]
+markers = "platform_system == \"Windows\""
+feature/processing-module
 files = [
     {file = "colorama-0.4.6-py2.py3-none-any.whl", hash = "sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6"},
     {file = "colorama-0.4.6.tar.gz", hash = "sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44"},
 ]
+ feature/add-generators
 markers = {lint = "platform_system == \"Windows\"", test = "sys_platform == \"win32\""}
 
 [[package]]
@@ -176,6 +181,7 @@ files = [
 
 [package.extras]
 toml = ["tomli ; python_full_version <= \"3.11.0a6\""]
+feature/processing-module
 
 [[package]]
 name = "flake8"
@@ -195,6 +201,7 @@ pycodestyle = ">=2.14.0,<2.15.0"
 pyflakes = ">=3.4.0,<3.5.0"
 
 [[package]]
+feature/add-generators
 name = "iniconfig"
 version = "2.3.0"
 description = "brain-dead simple config-ini parsing"
@@ -207,6 +214,7 @@ files = [
 ]
 
 [[package]]
+feature/processing-module
 name = "isort"
 version = "5.13.2"
 description = "A Python utility / library to sort Python imports."
@@ -425,7 +433,10 @@ version = "26.2"
 description = "Core utilities for Python packages"
 optional = false
 python-versions = ">=3.8"
+feature/add-generators
 groups = ["lint", "test"]
+groups = ["lint"]
+feature/processing-module
 files = [
     {file = "packaging-26.2-py3-none-any.whl", hash = "sha256:5fc45236b9446107ff2415ce77c807cee2862cb6fac22b8a73826d0693b0980e"},
     {file = "packaging-26.2.tar.gz", hash = "sha256:ff452ff5a3e828ce110190feff1178bb1f2ea2281fa2075aadb987c2fb221661"},
@@ -461,6 +472,7 @@ files = [
 ]
 
 [[package]]
+feature/add-generators
 name = "pluggy"
 version = "1.6.0"
 description = "plugin and hook calling mechanisms for python"
@@ -477,6 +489,7 @@ dev = ["pre-commit", "tox"]
 testing = ["coverage", "pytest", "pytest-benchmark"]
 
 [[package]]
+feature/processing-module
 name = "pycodestyle"
 version = "2.14.0"
 description = "Python style guide checker"
@@ -501,6 +514,7 @@ files = [
 ]
 
 [[package]]
+feature/add-generators
 name = "pygments"
 version = "2.20.0"
 description = "Pygments is a syntax highlighting package written in Python."
@@ -555,8 +569,8 @@ pytest = ">=4.6"
 
 [package.extras]
 testing = ["fields", "hunter", "process-tests", "pytest-xdist", "virtualenv"]
-
 [[package]]
+feature/processing-module
 name = "typing-extensions"
 version = "4.16.0"
 description = "Backported and Experimental Type Hints for Python 3.9+"
@@ -571,4 +585,7 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12"
+feature/add-generators
 content-hash = "4ba88a091878550a805557dd1b1466b7039d91b42b32f5ca8c3c8ec6f19d1c56"
+content-hash = "7e3623d22913d5bfbb960fe8abfe2f910c7a1bf0625cb95e52b897f00601b053"
+feature/processing-module
