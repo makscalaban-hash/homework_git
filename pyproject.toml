@@ -15,6 +15,16 @@ black = "^24.4.2"
 isort = "^5.13.2"
 mypy = "^1.10.0"
 
+[tool.poetry.group.test.dependencies]
+pytest = "^8.2.0"
+pytest-cov = "^5.0.0"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["src"]
+
 [tool.black]
 line-length = 88
 target-version = ['py312']
