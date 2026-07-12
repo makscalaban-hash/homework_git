@@ -15,6 +15,9 @@
 - Фильтрация операций по статусу (`filter_by_state`)
 - Сортировка операций по дате (`sort_by_date`)
 - Форматирование дат
+- Логирование работы функций через декоратор `log`
+  - Может выводить логи в консоль или в файл
+  - Логирует успешное выполнение и ошибки с входными параметрами
 
 ## Установка и запуск
 
@@ -70,10 +73,42 @@ executed_ops = filter_by_state(operations)
 sorted_ops = sort_by_date(operations)
 ```
 
+### Использование декоратора логирования
+
+```python
+from src.decorators import log
+
+# Логирование в консоль
+@log()
+def add(x, y):
+    return x + y
+
+add(2, 3)  # Выведет: "add ok"
+
+# Логирование в файл
+@log(filename="mylog.txt")
+def multiply(x, y):
+    return x * y
+
+multiply(3, 4)  # Запишет в mylog.txt: "multiply ok"
+
+# Логирование ошибок
+@log(filename="errors.txt")
+def divide(x, y):
+    return x / y
+
+try:
+    divide(10, 0)
+except ZeroDivisionError:
+    pass
+# В errors.txt запишется: "divide error: ZeroDivisionError. Inputs: (10, 0), {}"
+```
+
 ## Структура проекта
 
 - `src/masks/` — функции маскирования
 - `src/widget.py` — виджеты
 - `src/processing.py` — обработка данных
+- `src/decorators.py` — декораторы для логирования
 - `tests/` — тесты (pytest, фикстуры в `conftest.py`, отдельный файл теста на каждый модуль)
 - `htmlcov/` — HTML-отчет о покрытии тестами (генерируется командой из раздела «Тестирование»)
