@@ -15,6 +15,10 @@
 - Фильтрация операций по статусу (`filter_by_state`)
 - Сортировка операций по дате (`sort_by_date`)
 - Форматирование дат
+- Работа с генераторами для эффективной обработки больших объёмов данных
+  - Фильтрация транзакций по валюте (`filter_by_currency`)
+  - Получение описаний транзакций (`transaction_descriptions`)
+  - Генерация номеров банковских карт (`card_number_generator`)
 
 ## Установка и запуск
 
@@ -70,10 +74,54 @@ executed_ops = filter_by_state(operations)
 sorted_ops = sort_by_date(operations)
 ```
 
+### Работа с генераторами
+
+```python
+from src.generators import (
+    filter_by_currency,
+    transaction_descriptions,
+    card_number_generator,
+)
+
+transactions = [
+    {
+        'id': 1,
+        'description': 'Payment for services',
+        'operationAmount': {'amount': '1000',
+                             'currency': {'code': 'USD'}},
+    },
+    {
+        'id': 2,
+        'description': 'Transfer to friend',
+        'operationAmount': {'amount': '5000',
+                             'currency': {'code': 'RUB'}},
+    },
+]
+
+# Фильтрация по валюте (возвращает итератор)
+usd_transactions = filter_by_currency(transactions, 'USD')
+for transaction in usd_transactions:
+    print(transaction)
+
+# Получение описаний транзакций (генератор)
+descriptions = transaction_descriptions(transactions)
+for description in descriptions:
+    print(description)
+
+# Генерация номеров карт
+for card_number in card_number_generator(1, 5):
+    print(card_number)
+# Выведет:
+# 0000 0000 0000 0001
+# 0000 0000 0000 0002
+# ...
+```
+
 ## Структура проекта
 
 - `src/masks/` — функции маскирования
 - `src/widget.py` — виджеты
 - `src/processing.py` — обработка данных
+- `src/generators.py` — генераторы для работы с транзакциями
 - `tests/` — тесты (pytest, фикстуры в `conftest.py`, отдельный файл теста на каждый модуль)
 - `htmlcov/` — HTML-отчет о покрытии тестами (генерируется командой из раздела «Тестирование»)
