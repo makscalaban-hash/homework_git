@@ -2,9 +2,9 @@
 name = "bank-widget"
 version = "0.1.0"
 description = "Project for masking bank operations"
-authors = ["Your Name <your.email@example.com>"]
+authors = ["makscalaban@gmail.com"]
 readme = "README.md"
-packages = [{include = "masks", from = "src"}]
+packages = [{include = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.12"
@@ -39,3 +39,6 @@ python_version = "3.12"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
+explicit_package_bases = true
+mypy_path = "src"
+
