@@ -15,6 +15,11 @@
 - Фильтрация операций по статусу (`filter_by_state`)
 - Сортировка операций по дате (`sort_by_date`)
 - Форматирование дат
+- Логирование работы модулей `masks` и `utils` (файлы в `logs/`)
+- Чтение операций из JSON-файла (`read_operations_from_json`)
+- Конвертация суммы операции в рубли, USD/EUR через внешний API (`convert_to_rub`)
+- Чтение операций из CSV-файла (`read_operations_from_csv`)
+- Чтение операций из Excel-файла (`read_operations_from_excel`)
 
 ## Установка и запуск
 
@@ -57,6 +62,7 @@ poetry run pytest --cov=src --cov-report=html
 ```python
 from src.processing import filter_by_state, sort_by_date
 from src.widget import mask_account_card, get_date
+from src.readers import read_operations_from_csv, read_operations_from_excel
 
 operations = [
     {'id': 41428829, 'state': 'EXECUTED', 'date': '2019-07-03T18:35:29.512364'},
@@ -68,12 +74,20 @@ executed_ops = filter_by_state(operations)
 
 # Сортировка (по убыванию)
 sorted_ops = sort_by_date(operations)
+
+# Чтение из CSV / Excel
+csv_ops = read_operations_from_csv("data/transactions.csv")
+excel_ops = read_operations_from_excel("data/transactions_excel.xlsx")
 ```
 
 ## Структура проекта
 
-- `src/masks/` — функции маскирования
+- `src/masks/` — функции маскирования (с логированием)
 - `src/widget.py` — виджеты
 - `src/processing.py` — обработка данных
+- `src/utils.py` — чтение операций из JSON (с логированием)
+- `src/external_api.py` — конвертация валют через внешний API
+- `src/readers.py` — чтение операций из CSV и Excel
 - `tests/` — тесты (pytest, фикстуры в `conftest.py`, отдельный файл теста на каждый модуль)
+- `logs/` — файлы логов модулей `masks` и `utils` (не в git)
 - `htmlcov/` — HTML-отчет о покрытии тестами (генерируется командой из раздела «Тестирование»)
