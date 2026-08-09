@@ -45,3 +45,6 @@ poetry.lock  # можно оставить, но часто исключают �
 # Coverage (бинарные служебные файлы; сам HTML-отчет в htmlcov/ не игнорируем)
 .coverage
 .coverage.*
+# Logs
+logs/
+*.log

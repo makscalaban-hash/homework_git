@@ -41,6 +41,7 @@ def operations_empty() -> List[Dict[str, Any]]:
     """Пустой список операций."""
     return []
 
+
 @pytest.fixture
 def transaction_rub() -> Dict[str, Any]:
     """Транзакция в рублях — не должна вызывать внешний API."""
