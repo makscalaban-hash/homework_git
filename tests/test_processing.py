@@ -2,7 +2,12 @@ from typing import Any, Dict, List
 
 import pytest
 
-from src.processing import filter_by_state, sort_by_date
+from src.processing import (
+    filter_by_state,
+    process_bank_operations,
+    process_bank_search,
+    sort_by_date,
+)
 
 
 class TestFilterByState:
@@ -77,3 +82,92 @@ class TestSortByDate:
         ]
         result = sort_by_date(operations)
         assert len(result) == 2
+
+
+class TestProcessBankSearch:
+    @pytest.fixture
+    def operations_for_search(self) -> List[Dict[str, Any]]:
+        return [
+            {"id": 1, "description": "Перевод организации"},
+            {"id": 2, "description": "Перевод со счета на счет"},
+            {"id": 3, "description": "Открытие вклада"},
+            {"id": 4, "description": "Оплата (интернет)"},
+        ]
+
+    def test_finds_operations_by_search_string(
+        self, operations_for_search: List[Dict[str, Any]]
+    ) -> None:
+        result = process_bank_search(operations_for_search, "перевод")
+        assert [op["id"] for op in result] == [1, 2]
+
+    def test_search_is_case_insensitive(
+        self, operations_for_search: List[Dict[str, Any]]
+    ) -> None:
+        result = process_bank_search(operations_for_search, "ПЕРЕВОД")
+        assert [op["id"] for op in result] == [1, 2]
+
+    def test_returns_empty_list_when_no_match(
+        self, operations_for_search: List[Dict[str, Any]]
+    ) -> None:
+        assert process_bank_search(operations_for_search, "ипотека") == []
+
+    def test_returns_all_data_when_search_is_empty_string(
+        self, operations_for_search: List[Dict[str, Any]]
+    ) -> None:
+        result = process_bank_search(operations_for_search, "")
+        assert result == operations_for_search
+
+    def test_returns_empty_list_for_empty_input(
+        self, operations_empty: List[Dict[str, Any]]
+    ) -> None:
+        assert process_bank_search(operations_empty, "перевод") == []
+
+    def test_special_characters_in_search_are_treated_literally(
+        self, operations_for_search: List[Dict[str, Any]]
+    ) -> None:
+        result = process_bank_search(operations_for_search, "(интернет)")
+        assert [op["id"] for op in result] == [4]
+
+
+class TestProcessBankOperations:
+    @pytest.fixture
+    def operations_for_categories(self) -> List[Dict[str, Any]]:
+        return [
+            {"id": 1, "description": "Открытие вклада"},
+            {"id": 2, "description": "Открытие вклада"},
+            {"id": 3, "description": "Перевод организации"},
+            {"id": 4, "description": "Без категории"},
+        ]
+
+    def test_counts_operations_per_category(
+        self, operations_for_categories: List[Dict[str, Any]]
+    ) -> None:
+        result = process_bank_operations(
+            operations_for_categories, ["Открытие вклада", "Перевод организации"]
+        )
+        assert result == {"Открытие вклада": 2, "Перевод организации": 1}
+
+    def test_returns_zero_for_category_with_no_matches(
+        self, operations_for_categories: List[Dict[str, Any]]
+    ) -> None:
+        result = process_bank_operations(operations_for_categories, ["Ипотека"])
+        assert result == {"Ипотека": 0}
+
+    def test_returns_empty_dict_for_empty_categories(
+        self, operations_for_categories: List[Dict[str, Any]]
+    ) -> None:
+        assert process_bank_operations(operations_for_categories, []) == {}
+
+    def test_returns_zero_counts_for_empty_input(
+        self, operations_empty: List[Dict[str, Any]]
+    ) -> None:
+        result = process_bank_operations(operations_empty, ["Открытие вклада"])
+        assert result == {"Открытие вклада": 0}
+
+    def test_operations_without_description_are_ignored(self) -> None:
+        operations: List[Dict[str, Any]] = [
+            {"id": 1, "description": "Открытие вклада"},
+            {"id": 2},
+        ]
+        result = process_bank_operations(operations, ["Открытие вклада"])
+        assert result == {"Открытие вклада": 1}
