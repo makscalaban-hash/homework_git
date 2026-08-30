@@ -40,3 +40,21 @@ def operations_with_duplicate_dates() -> List[Dict[str, Any]]:
 def operations_empty() -> List[Dict[str, Any]]:
     """Пустой список операций."""
     return []
+
+
+@pytest.fixture
+def transaction_rub() -> Dict[str, Any]:
+    """Транзакция в рублях — не должна вызывать внешний API."""
+    return {"operationAmount": {"amount": "500.00", "currency": {"code": "RUB"}}}
+
+
+@pytest.fixture
+def transaction_usd() -> Dict[str, Any]:
+    """Транзакция в долларах — требует обращения к внешнему API."""
+    return {"operationAmount": {"amount": "100.00", "currency": {"code": "USD"}}}
+
+
+@pytest.fixture
+def transaction_eur() -> Dict[str, Any]:
+    """Транзакция в евро — требует обращения к внешнему API."""
+    return {"operationAmount": {"amount": "100.00", "currency": {"code": "EUR"}}}
