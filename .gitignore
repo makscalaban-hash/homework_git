@@ -41,3 +41,12 @@ Thumbs.db
 poetry.lock  # можно оставить, но часто исключают на начальных ДЗ
 .mypy_cache/
 .pytest_cache/
+
+# Coverage (бинарные служебные файлы; сам HTML-отчет в htmlcov/ не игнорируем)
+.coverage
+.coverage.*
+
+# Logs
+logs/
+data/
+*.log
