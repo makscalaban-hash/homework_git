@@ -20,6 +20,12 @@
 - Конвертация суммы операции в рубли, USD/EUR через внешний API (`convert_to_rub`)
 - Чтение операций из CSV-файла (`read_operations_from_csv`)
 - Чтение операций из Excel-файла (`read_operations_from_excel`)
+- Поиск операций по строке в описании с использованием `re` (`process_bank_search`)
+- Подсчет количества операций по категориям с использованием `Counter`
+  из `collections` (`process_bank_operations`)
+- Интерактивный сценарий работы с банковскими операциями через консоль (`main.py`):
+  выбор источника данных (JSON/CSV/XLSX), фильтрация по статусу, сортировка по дате,
+  фильтрация только рублевых операций и поиск по слову в описании
 
 ## Установка и запуск
 
@@ -35,6 +41,9 @@ poetry run black --check src/
 poetry run isort --check-only src/
 poetry run flake8 src/
 poetry run mypy src/
+
+# Запуск программы
+poetry run python main.py
 ```
 
 ## Тестирование
@@ -60,13 +69,20 @@ poetry run pytest --cov=src --cov-report=html
 ## Примеры использования
 
 ```python
-from src.processing import filter_by_state, sort_by_date
+from src.processing import (
+    filter_by_state,
+    process_bank_operations,
+    process_bank_search,
+    sort_by_date,
+)
 from src.widget import mask_account_card, get_date
 from src.readers import read_operations_from_csv, read_operations_from_excel
 
 operations = [
-    {'id': 41428829, 'state': 'EXECUTED', 'date': '2019-07-03T18:35:29.512364'},
-    {'id': 594226727, 'state': 'CANCELED', 'date': '2018-09-12T21:27:25.241689'}
+    {'id': 41428829, 'state': 'EXECUTED', 'date': '2019-07-03T18:35:29.512364',
+     'description': 'Перевод организации'},
+    {'id': 594226727, 'state': 'CANCELED', 'date': '2018-09-12T21:27:25.241689',
+     'description': 'Открытие вклада'}
 ]
 
 # Фильтрация
@@ -75,6 +91,14 @@ executed_ops = filter_by_state(operations)
 # Сортировка (по убыванию)
 sorted_ops = sort_by_date(operations)
 
+# Поиск операций по строке в описании
+found_ops = process_bank_search(operations, "перевод")
+
+# Подсчет операций по категориям
+categories_count = process_bank_operations(
+    operations, ["Перевод организации", "Открытие вклада"]
+)
+
 # Чтение из CSV / Excel
 csv_ops = read_operations_from_csv("data/transactions.csv")
 excel_ops = read_operations_from_excel("data/transactions_excel.xlsx")
@@ -82,9 +106,11 @@ excel_ops = read_operations_from_excel("data/transactions_excel.xlsx")
 
 ## Структура проекта
 
+- `main.py` — точка входа, интерактивный сценарий работы с банковскими операциями
 - `src/masks/` — функции маскирования (с логированием)
 - `src/widget.py` — виджеты
-- `src/processing.py` — обработка данных
+- `src/processing.py` — обработка данных (фильтрация, сортировка, поиск по `re`,
+  подсчет операций по категориям через `Counter`)
 - `src/utils.py` — чтение операций из JSON (с логированием)
 - `src/external_api.py` — конвертация валют через внешний API
 - `src/readers.py` — чтение операций из CSV и Excel
